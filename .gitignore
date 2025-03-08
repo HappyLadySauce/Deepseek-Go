@@ -1,0 +1,7 @@
+# go.mod和go.sum文件
+# go/src/go.mod
+go/src/go.sum
+
+# 临时文件
+tr.txt
+

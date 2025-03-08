@@ -1,0 +1,21 @@
+app:
+  name: "Deepseek-Go"
+  port: 14020
+database:
+  host: "localhost"
+  port: 3306
+  user: "root"
+  password: "Ssddffqxc547@"
+  name: "deepseek"
+  charset: "utf8mb4"
+  parseTime: true
+  loc: "Asia/Shanghai"
+  SetMaxIdleConns: 10
+  SetMaxOpenConns: 100
+  SetConnMaxLifetime: 60
+  SetConnMaxIdleTime: 60
+deepseek:
+  api_key: "sk-1234567890"
+  base_url: "https://api.deepseek.com"
+  model: "deepseek-chat"
+  stream: false
