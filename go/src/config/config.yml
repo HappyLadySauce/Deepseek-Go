@@ -5,7 +5,7 @@ database:
   host: "localhost"
   port: 3306
   user: "root"
-  password: "Ssddffqxc547@"
+  password: "S******xc547"
   name: "deepseek"
   charset: "utf8mb4"
   parseTime: true
@@ -20,7 +20,7 @@ redis:
   password: ""
   db: 0
 deepseek:
-  api_key: "sk-39cb87da643b4e38aed6f24a79dc281c"
+  api_key: "sk-39cb87d**************79dc281c"
   base_url: "https://api.deepseek.com"
   model: "deepseek-chat"
   stream: false
