@@ -22,6 +22,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 检查用户名
+	if !auth.CheckUsername(user.Username) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "用户名格式错误"})
+		return
+	}
+
 	// 检查用户是否存在
 	if global.DB.Where("username = ?", user.Username).First(&user).RowsAffected > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "用户已存在"})
@@ -93,7 +99,7 @@ func Login(c *gin.Context) {
 
 	// 从数据库获取用户信息
 	var user models.User
-	if err := global.DB.Where("username = ?", loginRequest.Username).First(&user).Error; err != nil {
+	if err := global.DB.Where("username = ?", loginRequest.Username).Or("email = ?", loginRequest.Username).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "用户不存在"})
 		} else {

@@ -24,11 +24,22 @@ type config struct {
 		SetConnMaxLifetime int    `mapstructure:"SetConnMaxLifetime"`
 		SetConnMaxIdleTime  int    `mapstructure:"SetConnMaxIdleTime"`
 	}
+	Redis struct {
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
+		Password string `mapstructure:"password"`
+		DB       int    `mapstructure:"db"`
+	}
 	DeepSeek struct {
 		APIKey  string `mapstructure:"api_key"`
 		BaseURL string `mapstructure:"base_url"`
 		Model   string `mapstructure:"model"`
 		Stream  bool   `mapstructure:"stream"`
+		MaxTokens int    `mapstructure:"max_tokens"`
+		Temperature float64 `mapstructure:"temperature"`
+		TopP float64 `mapstructure:"top_p"`
+		FrequencyPenalty float64 `mapstructure:"frequency_penalty"`
+		PresencePenalty float64 `mapstructure:"presence_penalty"`
 	}
 }
 
@@ -55,4 +66,6 @@ func InitConfig() {
 
 	// 初始化数据库
 	InitDB()
+	// 初始化Redis
+	InitRedis()
 }

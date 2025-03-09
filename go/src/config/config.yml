@@ -14,8 +14,18 @@ database:
   SetMaxOpenConns: 100
   SetConnMaxLifetime: 60
   SetConnMaxIdleTime: 60
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
 deepseek:
-  api_key: "sk-1234567890"
+  api_key: "sk-39cb87da643b4e38aed6f24a79dc281c"
   base_url: "https://api.deepseek.com"
   model: "deepseek-chat"
   stream: false
+  max_tokens: 1000
+  temperature: 0.5
+  top_p: 1
+  frequency_penalty: 0
+  presence_penalty: 0

@@ -1,7 +1,8 @@
 # go.mod和go.sum文件
 # go/src/go.mod
 go/src/go.sum
-
+# 配置文件
+go/src/config/config.yml
 # 临时文件
 tr.txt
 
