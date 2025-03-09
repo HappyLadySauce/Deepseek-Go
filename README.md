@@ -41,7 +41,7 @@
 │     │  └─ v1/           # API版本控制
 │     ├─ config/          # 配置文件
 │     │  ├─ config.go
-│     │  ├─ config.yml
+│     │  ├─ config.example.yml
 │     │  └─ db.go
 │     ├─ controller/      # 控制器层
 │     │  ├─ auth.go
