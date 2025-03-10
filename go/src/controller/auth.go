@@ -34,21 +34,15 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 检查邮箱格式
-	if !email.CheckEmailFormat(user.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "邮箱格式错误"})
+	// 验证邮箱格式和可用性
+	if err := email.ValidateEmail(user.Email); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 检查邮箱是否允许
-	if !email.AllowEmailFormat(user.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "邮箱不允许"})
-		return
-	}
-
-	// 检查邮箱是否存在
-	if global.DB.Where("email = ?", user.Email).First(&user).RowsAffected > 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "邮箱已存在"})
+	// 检查邮箱是否已验证
+	if err := email.CheckEmailVerified(user.Email); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -60,16 +54,13 @@ func Register(c *gin.Context) {
 	}
 	user.Password = hashedPassword
 
+	// 设置邮箱已验证状态
+	user.EmailVerified = true
+
 	// JWT 生成token
 	token, err := auth.GenerateToken(user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token生成失败"})
-		return
-	}
-
-	// 数据库迁移
-	if err := global.DB.AutoMigrate(&user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "数据库迁移失败"})
 		return
 	}
 

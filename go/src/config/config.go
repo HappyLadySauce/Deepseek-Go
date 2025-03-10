@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+
 	"github.com/spf13/viper"
 )
 
@@ -11,18 +12,18 @@ type config struct {
 		Port int    `mapstructure:"port"`
 	}
 	Database struct {
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		User     string `mapstructure:"user"`
-		Password string `mapstructure:"password"`
-		Name     string `mapstructure:"name"`
-		Charset  string `mapstructure:"charset"`
-		ParseTime bool   `mapstructure:"parseTime"`
-		Loc       string `mapstructure:"loc"`
+		Host               string `mapstructure:"host"`
+		Port               int    `mapstructure:"port"`
+		User               string `mapstructure:"user"`
+		Password           string `mapstructure:"password"`
+		Name               string `mapstructure:"name"`
+		Charset            string `mapstructure:"charset"`
+		ParseTime          bool   `mapstructure:"parseTime"`
+		Loc                string `mapstructure:"loc"`
 		SetMaxIdleConns    int    `mapstructure:"SetMaxIdleConns"`
 		SetMaxOpenConns    int    `mapstructure:"SetMaxOpenConns"`
 		SetConnMaxLifetime int    `mapstructure:"SetConnMaxLifetime"`
-		SetConnMaxIdleTime  int    `mapstructure:"SetConnMaxIdleTime"`
+		SetConnMaxIdleTime int    `mapstructure:"SetConnMaxIdleTime"`
 	}
 	Redis struct {
 		Host     string `mapstructure:"host"`
@@ -31,22 +32,31 @@ type config struct {
 		DB       int    `mapstructure:"db"`
 	}
 	DeepSeek struct {
-		APIKey  string `mapstructure:"api_key"`
-		BaseURL string `mapstructure:"base_url"`
-		Model   string `mapstructure:"model"`
-		Stream  bool   `mapstructure:"stream"`
-		MaxTokens int    `mapstructure:"max_tokens"`
-		Temperature float64 `mapstructure:"temperature"`
-		TopP float64 `mapstructure:"top_p"`
+		APIKey           string  `mapstructure:"api_key"`
+		BaseURL          string  `mapstructure:"base_url"`
+		Model            string  `mapstructure:"model"`
+		Stream           bool    `mapstructure:"stream"`
+		MaxTokens        int     `mapstructure:"max_tokens"`
+		Temperature      float64 `mapstructure:"temperature"`
+		TopP             float64 `mapstructure:"top_p"`
 		FrequencyPenalty float64 `mapstructure:"frequency_penalty"`
-		PresencePenalty float64 `mapstructure:"presence_penalty"`
+		PresencePenalty  float64 `mapstructure:"presence_penalty"`
 	}
 	Cors struct {
-		AllowOrigins []string `mapstructure:"allow_origins"`
-		AllowCredentials bool   `mapstructure:"allow_credentials"`
-		AllowMethods []string `mapstructure:"allow_methods"`
-		AllowHeaders []string `mapstructure:"allow_headers"`
-		MaxAge       int      `mapstructure:"max_age"`
+		AllowOrigins     []string `mapstructure:"allow_origins"`
+		AllowCredentials bool     `mapstructure:"allow_credentials"`
+		AllowMethods     []string `mapstructure:"allow_methods"`
+		AllowHeaders     []string `mapstructure:"allow_headers"`
+		MaxAge           int      `mapstructure:"max_age"`
+	}
+	Email struct {
+		Host       string `mapstructure:"host"`
+		Port       int    `mapstructure:"port"`
+		Username   string `mapstructure:"username"`
+		Password   string `mapstructure:"password"`
+		From       string `mapstructure:"from"`
+		EnableSSL  bool   `mapstructure:"enable_ssl"`
+		ServerName string `mapstructure:"server_name"`
 	}
 }
 
@@ -69,6 +79,11 @@ func InitConfig() {
 
 	if Config.App.Port == 0 {
 		Config.App.Port = 14020
+	}
+
+	// 如果ServerName未设置，则默认使用Host
+	if Config.Email.ServerName == "" {
+		Config.Email.ServerName = Config.Email.Host
 	}
 
 	// 初始化数据库

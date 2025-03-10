@@ -1,46 +1,91 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Plus, Message, Delete, Edit } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import { 
+  ChatLineRound,
+  Document,
+  Setting,
+  Monitor,
+  Connection,
+  Warning,
+  Refresh
+} from '@element-plus/icons-vue'
 
-const activeChat = ref('1')
-const chatList = ref([
-  { id: '1', title: '关于人工智能的讨论', time: '10:30', preview: '人工智能正在改变我们的生活方式...' },
-  { id: '2', title: '项目开发计划', time: '昨天', preview: '让我们讨论一下新项目的具体实施计划' },
-  { id: '3', title: '技术架构设计', time: '2天前', preview: '针对新系统的技术架构，我们需要考虑以下几点' },
-])
+const router = useRouter()
+const isCollapse = ref(false)
+const activeMenu = ref('overview')
+
+const handleSelect = (key: string) => {
+  switch(key) {
+    case 'overview':
+      router.push('/overview')
+      break
+    case 'chat':
+      router.push('/chat')
+      break
+    case 'history':
+      router.push('/history')
+      break
+    case 'settings':
+      router.push('/settings')
+      break
+  }
+}
 </script>
 
 <template>
   <div class="aside-container">
-    <div class="new-chat">
-      <el-button type="primary" class="new-chat-btn" :icon="Plus">
-        新建对话
-      </el-button>
-    </div>
+    <el-menu
+      :default-active="activeMenu"
+      class="aside-menu"
+      :collapse="isCollapse"
+      background-color="#1e2f40"
+      text-color="#fff"
+      active-text-color="#409EFF"
+      @select="handleSelect"
+    >
+      <div class="menu-header">
+        <span class="menu-title" v-if="!isCollapse">实例列表</span>
+        <el-icon class="refresh-icon" title="刷新"><Refresh /></el-icon>
+      </div>
 
-    <div class="chat-list">
-      <el-scrollbar height="calc(100vh - 180px)">
-        <div
-          v-for="chat in chatList"
-          :key="chat.id"
-          class="chat-item"
-          :class="{ 'active': activeChat === chat.id }"
-          @click="activeChat = chat.id"
-        >
-          <el-icon class="chat-icon"><Message /></el-icon>
-          <div class="chat-content">
-            <div class="chat-header">
-              <span class="chat-title">{{ chat.title }}</span>
-              <span class="chat-time">{{ chat.time }}</span>
-            </div>
-            <div class="chat-preview">{{ chat.preview }}</div>
-          </div>
-          <div class="chat-actions">
-            <el-icon class="action-icon"><Edit /></el-icon>
-            <el-icon class="action-icon"><Delete /></el-icon>
-          </div>
-        </div>
-      </el-scrollbar>
+      <el-menu-item index="overview">
+        <el-icon><Monitor /></el-icon>
+        <template #title>概览</template>
+      </el-menu-item>
+
+      <el-menu-item index="chat">
+        <el-icon><ChatLineRound /></el-icon>
+        <template #title>对话</template>
+      </el-menu-item>
+
+      <el-menu-item index="history">
+        <el-icon><Document /></el-icon>
+        <template #title>历史记录</template>
+      </el-menu-item>
+
+      <el-menu-item index="network">
+        <el-icon><Connection /></el-icon>
+        <template #title>网络</template>
+      </el-menu-item>
+
+      <el-menu-item index="monitor">
+        <el-icon><Warning /></el-icon>
+        <template #title>监控</template>
+      </el-menu-item>
+
+      <el-menu-item index="settings">
+        <el-icon><Setting /></el-icon>
+        <template #title>设置</template>
+      </el-menu-item>
+    </el-menu>
+
+    <div class="collapse-trigger" @click="isCollapse = !isCollapse">
+      <el-icon :class="{ 'is-collapse': isCollapse }">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" d="M831.872 340.864L512 652.672 192.128 340.864a30.592 30.592 0 00-42.752 0 29.12 29.12 0 000 41.6L489.664 714.24a32 32 0 0044.672 0l340.288-331.712a29.12 29.12 0 000-41.728 30.592 30.592 0 00-42.752 0z"/>
+        </svg>
+      </el-icon>
     </div>
   </div>
 </template>
@@ -48,111 +93,90 @@ const chatList = ref([
 <style scoped>
 .aside-container {
   height: 100%;
-  background: #f5f7fa;
-  border-right: 1px solid #e6e6e6;
-}
-
-.new-chat {
-  padding: 16px;
-  border-bottom: 1px solid #e6e6e6;
-}
-
-.new-chat-btn {
-  width: 100%;
-}
-
-.chat-list {
-  padding: 8px;
-}
-
-.chat-item {
   display: flex;
-  align-items: flex-start;
-  padding: 12px;
-  margin-bottom: 4px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
+  flex-direction: column;
+  background: #1e2f40;
   position: relative;
 }
 
-.chat-item:hover {
-  background: #ecf5ff;
-}
-
-.chat-item.active {
-  background: #ecf5ff;
-}
-
-.chat-icon {
-  font-size: 20px;
-  color: #409EFF;
-  margin-right: 12px;
-  margin-top: 2px;
-}
-
-.chat-content {
+.aside-menu {
   flex: 1;
-  min-width: 0;
+  border-right: none;
 }
 
-.chat-header {
+.menu-header {
+  height: 48px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.chat-title {
-  font-weight: 500;
-  color: #333;
+.menu-title {
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 500;
 }
 
-.chat-time {
-  font-size: 12px;
-  color: #999;
-}
-
-.chat-preview {
-  font-size: 12px;
-  color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chat-actions {
-  display: none;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #fff;
-  border-radius: 4px;
-  padding: 4px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-}
-
-.chat-item:hover .chat-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.action-icon {
+.refresh-icon {
   font-size: 16px;
-  color: #666;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
   transition: all 0.3s;
 }
 
-.action-icon:hover {
-  background: #f5f7fa;
-  color: #409EFF;
+.refresh-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.collapse-trigger {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+.collapse-trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.collapse-trigger .el-icon {
+  transition: transform 0.3s;
+  font-size: 16px;
+}
+
+.collapse-trigger .is-collapse {
+  transform: rotate(180deg);
+}
+
+:deep(.el-menu) {
+  border-right: none;
+}
+
+:deep(.el-menu-item) {
+  height: 40px;
+  line-height: 40px;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  &.is-active {
+    background-color: rgba(64, 158, 255, 0.1) !important;
+  }
+}
+
+:deep(.el-menu--collapse) {
+  width: 64px;
+}
+
+:deep(.el-menu-item .el-icon) {
+  font-size: 18px;
 }
 </style>

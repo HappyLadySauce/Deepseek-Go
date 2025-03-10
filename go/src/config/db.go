@@ -2,6 +2,7 @@ package config
 
 import (
 	"Deepseek-Go/global"
+	"Deepseek-Go/models"
 	"log"
 	"net/url"
 	"strconv"
@@ -33,4 +34,19 @@ func InitDB() {
 	sqlDB.SetConnMaxIdleTime(time.Duration(Config.Database.SetConnMaxIdleTime) * time.Second)
 
 	global.DB = db
+
+	// 数据库迁移
+	migrateDB()
+}
+
+// 数据库迁移
+func migrateDB() {
+	err := global.DB.AutoMigrate(
+		&models.User{},
+		&models.EmailVerification{},
+	)
+	if err != nil {
+		log.Fatalf("数据库迁移失败: %v", err)
+	}
+	log.Println("数据库迁移成功")
 }

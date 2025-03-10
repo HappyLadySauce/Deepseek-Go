@@ -1,30 +1,81 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { ElContainer, ElHeader, ElMain, ElFooter, ElAside } from 'element-plus'
 import Header from './components/Header.vue'
 import Aside from './components/Aside.vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const route = useRoute()
 const isCollapse = ref(false)
+const router = useRouter()
+
+// 判断当前是否在认证页面
+const isAuthPage = computed(() => {
+  return route.path.startsWith('/auth')
+})
+
+// 在组件中监听菜单点击
+const handleMenuClick = (index: string) => {
+  switch(index) {
+    case '1':
+      router.push('/chat')
+      break
+    case '2':
+      router.push('/history')
+      break
+    case '3':
+      router.push('/settings')
+      break
+  }
+}
+
+// 处理用户相关操作
+const handleCommand = (command: string) => {
+  switch(command) {
+    case 'profile':
+      router.push('/settings')
+      break
+    case 'logout':
+      // 处理登出逻辑
+      localStorage.removeItem('token')
+      router.push('/auth/login')
+      break
+  }
+}
 </script>
 
 <template>
-  <el-container class="app-container">
-    <el-header class="app-header" height="60px">
-      <Header />
-    </el-header>
-    
-    <el-container class="main-container">
-      <el-aside :width="isCollapse ? '64px' : '260px'" class="app-aside">
-        <Aside />
-      </el-aside>
-      
-      <el-container>
-        <el-main class="app-main">
-          <router-view></router-view>
-        </el-main>
+  <!-- 根据路由判断显示认证页面还是主应用布局 -->
+  <template v-if="isAuthPage">
+    <router-view></router-view>
+  </template>
+
+  <!-- 主应用布局 -->
+  <template v-else>
+    <el-container class="app-container">
+      <!-- 头部 -->
+      <el-header class="app-header" height="60px">
+        <Header />
+      </el-header>
+
+      <!-- 主容器 -->
+      <el-container class="main-container">
+        <!-- 侧边栏 -->
+        <el-aside :width="isCollapse ? '64px' : '260px'" class="app-aside">
+          <Aside />
+        </el-aside>
+
+        <!-- 主内容 -->
+        <el-container>
+          <el-main class="app-main">
+            <router-view></router-view>
+          </el-main>
+        </el-container>
       </el-container>
     </el-container>
-  </el-container>
+  </template>
 </template>
 
 <style>

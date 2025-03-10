@@ -28,6 +28,7 @@ app:
   # 连接最大空闲时间
   SetConnMaxIdleTime: 60
 # Redis配置
+redis:
   host: "localhost"
   # Redis端口
   port: 6379
@@ -36,6 +37,7 @@ app:
   # Redis数据库
   db: 0
 # 深度求索配置
+deepseek:
   api_key: "your_api_key_here"
   # 深度求索API基础URL
   base_url: "https://api.deepseek.com"
@@ -65,3 +67,19 @@ cors:
   allow_headers: ["Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"]
   # 预检请求缓存时间
   max_age: 86400
+# 邮箱配置
+email:
+  # 邮箱主机
+  host: "smtp.qq.com"
+  # 邮箱端口 (SSL端口通常是465或994，TLS通常是587)
+  port: 465
+  # 邮箱用户名 (QQ邮箱通常为完整邮箱地址，如 12345678@qq.com)
+  username: "12345678@qq.com"
+  # 邮箱密码 (QQ邮箱使用授权码而非登录密码)
+  password: "your_authorization_code"
+  # 邮箱发件人 (必须使用"名称 <邮箱地址>"格式，必须与username一致)
+  from: "系统验证 <12345678@qq.com>"
+  # 是否启用SSL/TLS (QQ邮箱需要设置为true)
+  enable_ssl: true
+  # 服务器名称 (如不设置则使用host值)
+  server_name: "smtp.qq.com"
