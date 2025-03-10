@@ -12,3 +12,7 @@ tr.txt
 # 日志文件
 go/src/logs/
 *.log
+
+# 前端文件
+vue/node_modules/*
+

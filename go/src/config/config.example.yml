@@ -1,31 +1,67 @@
 app:
+  # 应用名称
   name: "Deepseek-Go"
+  # 应用端口
   port: 14020
-database:
+# 数据库配置
   host: "localhost"
+  # 数据库端口
   port: 3306
+  # 数据库用户名
   user: "root"
+  # 数据库密码
   password: "your_password_here"
+  # 数据库名称
   name: "deepseek"
+  # 数据库字符集
   charset: "utf8mb4"
+  # 是否解析时间
   parseTime: true
+  # 时区
   loc: "Asia/Shanghai"
+  # 最大空闲连接数
   SetMaxIdleConns: 10
+  # 最大打开连接数
   SetMaxOpenConns: 100
+  # 连接最大生存时间
   SetConnMaxLifetime: 60
+  # 连接最大空闲时间
   SetConnMaxIdleTime: 60
-redis:
+# Redis配置
   host: "localhost"
+  # Redis端口
   port: 6379
+  # Redis密码
   password: ""
+  # Redis数据库
   db: 0
-deepseek:
+# 深度求索配置
   api_key: "your_api_key_here"
+  # 深度求索API基础URL
   base_url: "https://api.deepseek.com"
+  # 深度求索API模型
   model: "deepseek-chat"
+  # 是否流式输出
   stream: false
+  # 最大令牌数
   max_tokens: 1000
+  # 温度
   temperature: 0.5
+  # 上文概率
   top_p: 1
+  # 频率惩罚
   frequency_penalty: 0
+  # 存在惩罚
   presence_penalty: 0
+# 跨域配置
+cors:
+  # 允许的域名
+  allow_origins: ["http://localhost:5173"]
+  # 允许携带凭证
+  allow_credentials: true
+  # 允许的请求方法
+  allow_methods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"]
+  # 允许的请求头
+  allow_headers: ["Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"]
+  # 预检请求缓存时间
+  max_age: 86400

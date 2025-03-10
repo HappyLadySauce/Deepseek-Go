@@ -41,6 +41,13 @@ type config struct {
 		FrequencyPenalty float64 `mapstructure:"frequency_penalty"`
 		PresencePenalty float64 `mapstructure:"presence_penalty"`
 	}
+	Cors struct {
+		AllowOrigins []string `mapstructure:"allow_origins"`
+		AllowCredentials bool   `mapstructure:"allow_credentials"`
+		AllowMethods []string `mapstructure:"allow_methods"`
+		AllowHeaders []string `mapstructure:"allow_headers"`
+		MaxAge       int      `mapstructure:"max_age"`
+	}
 }
 
 var Config *config

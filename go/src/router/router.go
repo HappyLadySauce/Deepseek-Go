@@ -9,13 +9,15 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 
-	auth := router.Group("/auth")
+	// 跨域中间件
+	router.Use(middlewares.CORSMiddleware())
+
+	api := router.Group("/api/v1")
+	auth := api.Group("/auth")
 	{
 		auth.POST("/login", controller.Login)
 		auth.POST("/register", controller.Register)
 	}
-
-	api := router.Group("/api/v1")
 	api.Use(middlewares.AuthMiddleware())
 	{
 		
