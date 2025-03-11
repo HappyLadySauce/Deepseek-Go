@@ -84,3 +84,119 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* 全局CSS变量 */
+:root, html {
+  /* 默认值 - 会被theme.ts中的值覆盖 */
+  --page-bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --header-bg: #ffffff;
+  --text-color: #303133;
+  --text-light: #606266;
+  --text-muted: #909399;
+  --menu-text-color: #303133;
+  --border-color: #EBEEF5;
+  --hover-color: #f5f7fa;
+  --active-color: #ecf5ff;
+  --primary-color: #409EFF;
+  --secondary-color: #67C23A;
+  --message-bg: #f5f7fa;
+  --user-bg: #ecf5ff;
+  --assistant-bg: #f5f7fa;
+  --card-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  --message-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --tag-bg: #ecf5ff;
+  --item-bg: #ffffff;
+  --scrollbar-color: #C0C4CC;
+  --scrollbar-track: #EBEEF5;
+  --heading-color: #303133;
+}
+
+/* 全局样式 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text-color);
+  background-color: var(--page-bg);
+  transition: background-color 0.3s, color 0.3s;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+}
+
+/* 黑暗模式类 */
+:root.dark-theme, html.dark-theme, .dark-theme {
+  --page-bg: #1e1e1e;
+  --card-bg: #252526;
+  --header-bg: #1e1e1e;
+  --text-color: #e1e1e1;
+  --text-light: #b0b0b0;
+  --text-muted: #8e8e8e;
+  --menu-text-color: #e1e1e1;
+  --border-color: #3e3e3e;
+  --hover-color: #2a2d2e;
+  --active-color: #094771;
+  --primary-color: #409EFF;
+  --secondary-color: #67C23A;
+  --message-bg: #2d2d2d;
+  --user-bg: #094771;
+  --assistant-bg: #2d2d2d;
+  --card-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4);
+  --message-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --tag-bg: #094771;
+  --item-bg: #1e1e1e;
+  --scrollbar-color: #4e4e4e;
+  --scrollbar-track: #2d2d2d;
+  --heading-color: #e1e1e1;
+}
+
+/* 亮色模式类 */
+:root.light-theme, html.light-theme, .light-theme {
+  --page-bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --header-bg: #ffffff;
+  --text-color: #303133;
+  --text-light: #606266;
+  --text-muted: #909399;
+  --menu-text-color: #303133;
+  --border-color: #EBEEF5;
+  --hover-color: #f5f7fa;
+  --active-color: #ecf5ff;
+  --primary-color: #409EFF;
+  --secondary-color: #67C23A;
+  --message-bg: #f5f7fa;
+  --user-bg: #ecf5ff;
+  --assistant-bg: #f5f7fa;
+  --card-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  --message-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --tag-bg: #ecf5ff;
+  --item-bg: #ffffff;
+  --scrollbar-color: #C0C4CC;
+  --scrollbar-track: #EBEEF5;
+  --heading-color: #303133;
+}

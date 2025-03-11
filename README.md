@@ -1,4 +1,115 @@
-# Deepseek-Go
+# DeepSeek-Go 智能运维监控平台
+
+DeepSeek-Go 是一个集成 AI 的智能运维监控平台，提供系统监控、网络监控、告警管理和 AI 聊天等功能。
+
+## 主要功能
+
+- **系统监控**：实时监控服务器CPU、内存、磁盘等指标
+- **网络监控**：监控网络连接、流量和延迟
+- **告警管理**：设置告警规则，及时通知异常情况
+- **AI 聊天**：集成 DeepSeek AI 模型，提供智能问答和运维建议
+
+## 技术栈
+
+- 前端：Vue 3 + TypeScript + Element Plus
+- 后端：Go + Gin + GORM
+- AI：DeepSeek 大语言模型
+
+## 最近修复的问题
+
+### 2024-03-11 修复
+
+1. **主题切换功能修复**
+   - 修复了 CSS 变量在不同主题间的切换问题
+   - 更新了 `base.css` 中的主题类选择器，确保主题变量能全局生效
+   - 修改了 `App.vue` 中的主题初始化逻辑，使用 `initTheme()` 函数
+   - 更新了 `Aside.vue` 中的主题相关变量，确保菜单颜色正确显示
+
+2. **API 请求路径修复**
+   - 修复了 `axios.ts` 中的 baseURL，避免 API 路径重复前缀问题
+   - 添加了请求日志，便于调试 API 调用
+
+3. **流式聊天功能修复**
+   - 修复了 `chatApi.ts` 中的 `createChatStream` 函数，确保正确的 API 路径
+   - 添加了流式连接状态的日志记录
+
+4. **消息发送功能优化**
+   - 简化了 `sendMessage` 函数，移除了复杂的流式处理逻辑
+   - 添加了更多调试日志，便于追踪消息发送过程
+   - 修复了类型错误，确保消息对象符合接口定义
+
+## 使用说明
+
+### 开发环境
+
+1. 克隆仓库
+```bash
+git clone https://github.com/your-username/deepseek-go.git
+cd deepseek-go
+```
+
+2. 安装依赖
+```bash
+# 前端
+cd vue
+npm install
+
+# 后端
+cd ../backend
+go mod tidy
+```
+
+3. 启动开发服务器
+```bash
+# 前端
+cd vue
+npm run dev
+
+# 后端
+cd ../backend
+go run main.go
+```
+
+### 生产环境
+
+1. 构建前端
+```bash
+cd vue
+npm run build
+```
+
+2. 构建后端
+```bash
+cd ../backend
+go build -o deepseek-go
+```
+
+3. 部署
+```bash
+./deepseek-go
+```
+
+## 配置说明
+
+### 前端配置
+
+前端配置文件位于 `vue/.env` 和 `vue/.env.production`，可以配置 API 地址等参数。
+
+### 后端配置
+
+后端配置文件位于 `backend/config.yaml`，可以配置数据库连接、AI 模型参数等。
+
+## 贡献指南
+
+1. Fork 仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证 - 详情请参阅 [LICENSE](LICENSE) 文件。
 
 ## 项目简介
 本项目是一个基于Go语言和Vue3的全栈开发练手项目，旨在提供一个现代化的Web应用开发框架示例。项目采用前后端分离架构，展示了如何使用当前流行的技术栈构建可扩展的Web应用。
@@ -727,9 +838,6 @@ npm run dev
 
 ## 贡献指南
 欢迎提交Issue和Pull Request
-
-## 许可证
-MIT License
 
 ## 联系方式
 如有问题，请提交Issue或联系项目维护者。

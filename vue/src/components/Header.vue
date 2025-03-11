@@ -19,6 +19,11 @@ const handleCommand = (command: string) => {
       break
   }
 }
+
+// 跳转到AI聊天页面
+const goToChat = () => {
+  router.push('/chat')
+}
 </script>
 
 <template>
@@ -29,7 +34,7 @@ const handleCommand = (command: string) => {
         <span class="divider"></span>
         <span class="product-name">DeepSeek-Go —— 集成 AI 的智能运维监控平台</span>
       </div>
-      <div class="region-selector">
+      <div class="region-selector" @click="goToChat">
         <span class="region-text">DeepSeek Chat</span>
         <el-icon><ChatDotSquare /></el-icon>
       </div>

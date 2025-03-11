@@ -1,4 +1,5 @@
 // import './assets/main.css'
+import './assets/base.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -9,6 +10,9 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
 import router from './router'
+
+// 导入主题初始化
+import '@/utils/theme'
 
 const app = createApp(App)
 

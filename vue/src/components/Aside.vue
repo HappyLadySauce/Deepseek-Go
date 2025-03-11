@@ -48,9 +48,9 @@ const handleSelect = (key: string) => {
       :default-active="activeMenu"
       class="aside-menu"
       :collapse="isCollapse"
-      :background-color="'var(--aside-bg)'"
-      :text-color="'var(--menu-text-color)'"
-      :active-text-color="'var(--menu-active-text-color)'"
+      :background-color="'var(--card-bg)'"
+      :text-color="'var(--text-color)'"
+      :active-text-color="'var(--primary-color)'"
       @select="handleSelect"
     >
       <div class="menu-header">
@@ -105,7 +105,7 @@ const handleSelect = (key: string) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--aside-bg);
+  background: var(--card-bg);
   position: relative;
   transition: background-color 0.3s ease;
 }
@@ -121,7 +121,7 @@ const handleSelect = (key: string) => {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  color: var(--menu-text-color);
+  color: var(--text-color);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -134,9 +134,7 @@ const handleSelect = (key: string) => {
 .menu-title {
   font-size: 14px;
   font-weight: 500;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--primary-color);
 }
 
 .refresh-icon {
@@ -145,7 +143,7 @@ const handleSelect = (key: string) => {
   padding: 4px;
   border-radius: 4px;
   transition: all 0.3s;
-  color: var(--menu-text-color);
+  color: var(--text-color);
 }
 
 .refresh-icon:hover {
@@ -159,7 +157,7 @@ const handleSelect = (key: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--menu-text-color);
+  color: var(--text-color);
   cursor: pointer;
   border-top: 1px solid var(--border-color);
   transition: all 0.3s;
@@ -196,7 +194,7 @@ const handleSelect = (key: string) => {
 }
 
 :deep(.el-menu-item.is-active) {
-  background-color: var(--menu-active-bg) !important;
+  background-color: var(--active-color) !important;
   color: var(--primary-color) !important;
   position: relative;
 }
@@ -208,7 +206,7 @@ const handleSelect = (key: string) => {
   top: 0;
   height: 100%;
   width: 4px;
-  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+  background: var(--primary-color);
 }
 
 :deep(.el-menu--collapse) {
