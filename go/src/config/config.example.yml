@@ -36,25 +36,6 @@ redis:
   password: ""
   # Redis数据库
   db: 0
-# 深度求索配置
-deepseek:
-  api_key: "your_api_key_here"
-  # 深度求索API基础URL
-  base_url: "https://api.deepseek.com"
-  # 深度求索API模型
-  model: "deepseek-chat"
-  # 是否流式输出
-  stream: false
-  # 最大令牌数
-  max_tokens: 1000
-  # 温度
-  temperature: 0.5
-  # 上文概率
-  top_p: 1
-  # 频率惩罚
-  frequency_penalty: 0
-  # 存在惩罚
-  presence_penalty: 0
 # 跨域配置
 cors:
   # 允许的域名
@@ -83,3 +64,16 @@ email:
   enable_ssl: true
   # 服务器名称 (如不设置则使用host值)
   server_name: "smtp.qq.com"
+# AI配置
+ai:
+  # 深度求索配置
+  deepseek:
+    api_key: "your_api_key_here"
+    # 深度求索API基础URL
+    base_url: "https://api.deepseek.com"
+    # 深度求索API模型
+    model: "deepseek-chat"
+  kimi:
+    api_key: "your_api_key_here"
+    # 深度求索API基础URL
+    base_url: "https://api.deepseek.com"

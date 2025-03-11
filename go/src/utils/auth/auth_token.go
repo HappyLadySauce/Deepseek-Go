@@ -3,7 +3,9 @@ package auth
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -26,9 +28,20 @@ func GenerateToken(username string) (string, error) {
 
 // 验证token
 func ValidateToken(tokenString string) (string, error) {
+	// 去除可能的引号
+	tokenString = strings.Trim(tokenString, "\"")
+
 	// 去掉 Token 的 "Bearer " 前缀。
-	if len(tokenString) > 7 && tokenString[:7] == "Bearer "{
+	if len(tokenString) > 7 && strings.HasPrefix(strings.ToLower(tokenString), "bearer ") {
 		tokenString = tokenString[7:]
+	}
+
+	// 去除令牌两端的空格
+	tokenString = strings.TrimSpace(tokenString)
+
+	// 验证令牌是否为空
+	if tokenString == "" {
+		return "", errors.New("empty token")
 	}
 
 	// 验证 JWT 的签名方法是否为 HMAC。

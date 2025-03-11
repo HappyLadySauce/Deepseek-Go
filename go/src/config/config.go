@@ -31,17 +31,6 @@ type config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	}
-	DeepSeek struct {
-		APIKey           string  `mapstructure:"api_key"`
-		BaseURL          string  `mapstructure:"base_url"`
-		Model            string  `mapstructure:"model"`
-		Stream           bool    `mapstructure:"stream"`
-		MaxTokens        int     `mapstructure:"max_tokens"`
-		Temperature      float64 `mapstructure:"temperature"`
-		TopP             float64 `mapstructure:"top_p"`
-		FrequencyPenalty float64 `mapstructure:"frequency_penalty"`
-		PresencePenalty  float64 `mapstructure:"presence_penalty"`
-	}
 	Cors struct {
 		AllowOrigins     []string `mapstructure:"allow_origins"`
 		AllowCredentials bool     `mapstructure:"allow_credentials"`
@@ -57,6 +46,18 @@ type config struct {
 		From       string `mapstructure:"from"`
 		EnableSSL  bool   `mapstructure:"enable_ssl"`
 		ServerName string `mapstructure:"server_name"`
+	}
+	AI struct {
+		// 深度求索 api
+		DeepSeek struct {
+			APIKey string `mapstructure:"api_key"`
+			BaseURL string `mapstructure:"base_url"`
+		}
+		// 月之暗面 api
+		Kimi struct {
+			APIKey string `mapstructure:"api_key"`
+			BaseURL string `mapstructure:"base_url"`
+		}
 	}
 }
 

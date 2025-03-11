@@ -44,6 +44,11 @@ func migrateDB() {
 	err := global.DB.AutoMigrate(
 		&models.User{},
 		&models.EmailVerification{},
+		&models.ChatSession{},          // 聊天会话表
+		&models.ChatMessage{},          // 聊天消息表
+		&models.KnowledgeFile{},        // 知识库文件表
+		&models.KnowledgeVectorStore{}, // 知识库向量存储表
+		&models.AIConfig{},             // AI配置表
 	)
 	if err != nil {
 		log.Fatalf("数据库迁移失败: %v", err)
