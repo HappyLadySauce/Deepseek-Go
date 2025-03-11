@@ -38,7 +38,8 @@ const handleCommand = (command: string) => {
     <div class="header-right">
       <div class="theme-toggle">
         <el-button 
-          type="text" 
+          type="primary" 
+          text
           @click="toggleTheme" 
           class="theme-button"
           :title="currentTheme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'"

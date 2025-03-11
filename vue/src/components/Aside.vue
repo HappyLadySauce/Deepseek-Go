@@ -7,7 +7,7 @@ import {
   Connection,
   Warning,
   Refresh,
-  Odometer
+  DataAnalysis
 } from '@element-plus/icons-vue'
 
 // 路由
@@ -67,7 +67,7 @@ const handleSelect = (key: string) => {
 
       <el-sub-menu index="monitor">
         <template #title>
-          <el-icon><Odometer /></el-icon>
+          <el-icon><DataAnalysis /></el-icon>
           <span>实时监控</span>
         </template>
         <el-menu-item index="system-monitor">
