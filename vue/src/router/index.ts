@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '@/views/auth/Login.vue'
-import Register from '@/views/auth/Register.vue'
-import ForgotPassword from '@/views/auth/ForgotPassword.vue'
+import Login from '@/components/auth/Login.vue'
+import Register from '@/components/auth/Register.vue'
+import ForgotPassword from '@/components/auth/ForgotPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,7 +14,7 @@ const router = createRouter({
     // 认证相关路由
     {
       path: '/auth',
-      component: () => import('@/views/auth/AuthLayout.vue'),
+      component: () => import('@/components/auth/AuthLayout.vue'),
       children: [
         { path: 'login', component: Login },
         { path: 'register', component: Register },
@@ -29,7 +29,7 @@ const router = createRouter({
     // 主应用路由
     {
       path: '/index',
-      component: () => import('@/views/home/index.vue'),
+      component: () => import('@/views/overview/index.vue'),
     }
   ]
 })
@@ -45,9 +45,9 @@ router.beforeEach((to, from, next) => {
       path: '/auth/login',
       query: { redirect: to.fullPath } // 保存重定向地址
     })
-  } else if (token && to.path.startsWith('/auth')) {
+  } else if (token && (to.path.startsWith('/auth') || to.path.startsWith('/auth/login') || to.path.startsWith('/auth/register') || to.path.startsWith('/auth/forgot-password'))) {
     // 已登录但访问登录页，重定向到主页
-    next({ path: '/chat' })
+    next({ path: '/index' })
   } else {
     next()
   }

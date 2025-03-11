@@ -11,20 +11,30 @@ import {
   Refresh
 } from '@element-plus/icons-vue'
 
+// 路由
 const router = useRouter()
+// 是否折叠
 const isCollapse = ref(false)
+// 当前选中的菜单
 const activeMenu = ref('overview')
 
+// 监控子菜单是否展开
+const isMonitorSubMenuOpen = ref(false)
+
+// 菜单点击事件
 const handleSelect = (key: string) => {
   switch(key) {
     case 'overview':
       router.push('/overview')
       break
-    case 'chat':
-      router.push('/chat')
+    case 'system-monitor':
+      router.push('/monitor/system')
       break
-    case 'history':
-      router.push('/history')
+    case 'network-monitor':
+      router.push('/monitor/network')
+      break
+    case 'alarm-monitor':
+      router.push('/monitor/alarm')
       break
     case 'settings':
       router.push('/settings')
@@ -50,33 +60,32 @@ const handleSelect = (key: string) => {
       </div>
 
       <el-menu-item index="overview">
-        <el-icon><Monitor /></el-icon>
-        <template #title>概览</template>
+        <el-icon><ElementPlus /></el-icon>
+        <template #title>总体概览</template>
       </el-menu-item>
 
-      <el-menu-item index="chat">
-        <el-icon><ChatLineRound /></el-icon>
-        <template #title>对话</template>
-      </el-menu-item>
-
-      <el-menu-item index="history">
-        <el-icon><Document /></el-icon>
-        <template #title>历史记录</template>
-      </el-menu-item>
-
-      <el-menu-item index="network">
-        <el-icon><Connection /></el-icon>
-        <template #title>网络</template>
-      </el-menu-item>
-
-      <el-menu-item index="monitor">
-        <el-icon><Warning /></el-icon>
-        <template #title>监控</template>
-      </el-menu-item>
+      <el-sub-menu index="monitor">
+        <template #title>
+          <el-icon><Odometer /></el-icon>
+          <span>实时监控</span>
+        </template>
+        <el-menu-item index="system-monitor">
+          <el-icon><Monitor /></el-icon>
+          系统监控
+        </el-menu-item>
+        <el-menu-item index="network-monitor">
+          <el-icon><Connection /></el-icon>
+          网络监控
+        </el-menu-item>
+        <el-menu-item index="alarm-monitor">
+          <el-icon><Warning /></el-icon>
+          监控告警
+        </el-menu-item>
+      </el-sub-menu>
 
       <el-menu-item index="settings">
         <el-icon><Setting /></el-icon>
-        <template #title>设置</template>
+        <template #title>系统配置</template>
       </el-menu-item>
     </el-menu>
 
@@ -178,5 +187,16 @@ const handleSelect = (key: string) => {
 
 :deep(.el-menu-item .el-icon) {
   font-size: 18px;
+}
+
+:deep(.el-sub-menu__title) {
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+:deep(.el-sub-menu .el-menu-item) {
+  height: 40px !important;
+  line-height: 40px !important;
+  padding-left: 50px !important;
 }
 </style>
