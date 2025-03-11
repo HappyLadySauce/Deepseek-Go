@@ -137,7 +137,7 @@ export default function () {
             
             // 跳转到首页或上一页
             const redirect = router.currentRoute.value.query.redirect as string
-            router.push(redirect || '/index')
+            router.push(redirect || '/overview')
         } catch (error: any) {
             // 使用统一的错误处理工具
             handleApiError(error, formErrors, refreshCaptcha)

@@ -15,4 +15,5 @@ go/src/logs/
 
 # 前端文件
 vue/node_modules/*
+vue/yarn.lock
 

@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { 
-  ChatLineRound,
-  Document,
   Setting,
   Monitor,
   Connection,
   Warning,
-  Refresh
+  Refresh,
+  Odometer
 } from '@element-plus/icons-vue'
 
 // 路由
 const router = useRouter()
-// 是否折叠
-const isCollapse = ref(false)
+
+// 从父组件获取折叠状态
+const isCollapse = inject('isCollapse', ref(false))
+const toggleCollapse = inject('toggleCollapse', () => {})
+
 // 当前选中的菜单
 const activeMenu = ref('overview')
-
-// 监控子菜单是否展开
-const isMonitorSubMenuOpen = ref(false)
 
 // 菜单点击事件
 const handleSelect = (key: string) => {
@@ -49,18 +48,20 @@ const handleSelect = (key: string) => {
       :default-active="activeMenu"
       class="aside-menu"
       :collapse="isCollapse"
-      background-color="#1e2f40"
-      text-color="#fff"
-      active-text-color="#409EFF"
+      :background-color="'var(--aside-bg)'"
+      :text-color="'var(--menu-text-color)'"
+      :active-text-color="'var(--menu-active-text-color)'"
       @select="handleSelect"
     >
       <div class="menu-header">
         <span class="menu-title" v-if="!isCollapse">实例列表</span>
-        <el-icon class="refresh-icon" title="刷新"><Refresh /></el-icon>
+        <div class="header-actions">
+          <el-icon class="refresh-icon" title="刷新"><Refresh /></el-icon>
+        </div>
       </div>
 
       <el-menu-item index="overview">
-        <el-icon><ElementPlus /></el-icon>
+        <el-icon><Monitor /></el-icon>
         <template #title>总体概览</template>
       </el-menu-item>
 
@@ -89,7 +90,7 @@ const handleSelect = (key: string) => {
       </el-menu-item>
     </el-menu>
 
-    <div class="collapse-trigger" @click="isCollapse = !isCollapse">
+    <div class="collapse-trigger" @click="toggleCollapse">
       <el-icon :class="{ 'is-collapse': isCollapse }">
         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
           <path fill="currentColor" d="M831.872 340.864L512 652.672 192.128 340.864a30.592 30.592 0 00-42.752 0 29.12 29.12 0 000 41.6L489.664 714.24a32 32 0 0044.672 0l340.288-331.712a29.12 29.12 0 000-41.728 30.592 30.592 0 00-42.752 0z"/>
@@ -104,8 +105,9 @@ const handleSelect = (key: string) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #1e2f40;
+  background: var(--aside-bg);
   position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .aside-menu {
@@ -119,13 +121,22 @@ const handleSelect = (key: string) => {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--menu-text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .menu-title {
   font-size: 14px;
   font-weight: 500;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .refresh-icon {
@@ -134,10 +145,13 @@ const handleSelect = (key: string) => {
   padding: 4px;
   border-radius: 4px;
   transition: all 0.3s;
+  color: var(--menu-text-color);
 }
 
 .refresh-icon:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--hover-color);
+  color: var(--primary-color);
+  transform: rotate(180deg);
 }
 
 .collapse-trigger {
@@ -145,14 +159,15 @@ const handleSelect = (key: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--menu-text-color);
   cursor: pointer;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   transition: all 0.3s;
 }
 
 .collapse-trigger:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--hover-color);
+  color: var(--primary-color);
 }
 
 .collapse-trigger .el-icon {
@@ -171,14 +186,29 @@ const handleSelect = (key: string) => {
 :deep(.el-menu-item) {
   height: 40px;
   line-height: 40px;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-  }
-  
-  &.is-active {
-    background-color: rgba(64, 158, 255, 0.1) !important;
-  }
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.el-menu-item:hover) {
+  background-color: var(--hover-color) !important;
+  color: var(--primary-color) !important;
+}
+
+:deep(.el-menu-item.is-active) {
+  background-color: var(--menu-active-bg) !important;
+  color: var(--primary-color) !important;
+  position: relative;
+}
+
+:deep(.el-menu-item.is-active::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
 }
 
 :deep(.el-menu--collapse) {
@@ -194,9 +224,18 @@ const handleSelect = (key: string) => {
   line-height: 40px !important;
 }
 
+:deep(.el-sub-menu__title:hover) {
+  background-color: var(--hover-color) !important;
+  color: var(--primary-color) !important;
+}
+
 :deep(.el-sub-menu .el-menu-item) {
   height: 40px !important;
   line-height: 40px !important;
   padding-left: 50px !important;
+}
+
+:deep(.el-sub-menu.is-active .el-sub-menu__title) {
+  color: var(--primary-color) !important;
 }
 </style>

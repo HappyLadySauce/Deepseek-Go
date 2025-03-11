@@ -28,8 +28,21 @@ const router = createRouter({
     },
     // 主应用路由
     {
-      path: '/index',
+      path: '/overview',
       component: () => import('@/views/overview/index.vue'),
+    },
+    {
+      path: '/monitor',
+      component: () => import('@/views/monitor/system.vue'),
+      children: [
+        { path: 'system', component: () => import('@/views/monitor/system.vue') },
+        { path: 'network', component: () => import('@/views/monitor/network.vue') },
+        { path: 'alarm', component: () => import('@/views/monitor/alarm.vue') },
+      ]
+    },
+    {
+      path: '/settings',
+      component: () => import('@/views/settings/index.vue'),
     }
   ]
 })
@@ -47,7 +60,7 @@ router.beforeEach((to, from, next) => {
     })
   } else if (token && (to.path.startsWith('/auth') || to.path.startsWith('/auth/login') || to.path.startsWith('/auth/register') || to.path.startsWith('/auth/forgot-password'))) {
     // 已登录但访问登录页，重定向到主页
-    next({ path: '/index' })
+    next({ path: '/overview' })
   } else {
     next()
   }

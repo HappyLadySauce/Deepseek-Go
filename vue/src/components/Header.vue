@@ -2,7 +2,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Search, User, Setting, SwitchButton } from '@element-plus/icons-vue'
+import { ChatDotSquare, User, Setting, Sunny, MoonNight } from '@element-plus/icons-vue'
+import { toggleTheme, currentTheme } from '@/utils/theme'
 
 const router = useRouter()
 const activeIndex = ref('1')
@@ -26,21 +27,26 @@ const handleCommand = (command: string) => {
       <div class="logo-section">
         <img src="../assets/logo.png" alt="Logo" class="logo-img" />
         <span class="divider"></span>
-        <span class="product-name">轻量应用服务器</span>
+        <span class="product-name">DeepSeek-Go —— 集成 AI 的智能运维监控平台</span>
       </div>
       <div class="region-selector">
-        <span class="region-text">成都</span>
-        <el-icon class="region-icon"><SwitchButton /></el-icon>
+        <span class="region-text">DeepSeek Chat</span>
+        <el-icon><ChatDotSquare /></el-icon>
       </div>
     </div>
 
     <div class="header-right">
-      <div class="search-section">
-        <el-input
-          placeholder="搜索资源、产品或文档"
-          :prefix-icon="Search"
-          class="search-input"
-        />
+      <div class="theme-toggle">
+        <el-button 
+          type="text" 
+          @click="toggleTheme" 
+          class="theme-button"
+          :title="currentTheme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'"
+        >
+          <el-icon>
+            <component :is="currentTheme === 'dark' ? Sunny : MoonNight" />
+          </el-icon>
+        </el-button>
       </div>
       
       <div class="user-section">
@@ -79,8 +85,9 @@ const handleCommand = (command: string) => {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  background: #1e2f40;
-  color: #fff;
+  background: var(--header-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease;
 }
 
 .header-left {
@@ -103,13 +110,16 @@ const handleCommand = (command: string) => {
 .divider {
   width: 1px;
   height: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--border-color);
 }
 
 .product-name {
   font-size: 16px;
   font-weight: 500;
-  color: #fff;
+  color: var(--menu-text-color);
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .region-selector {
@@ -120,19 +130,16 @@ const handleCommand = (command: string) => {
   padding: 4px 8px;
   border-radius: 4px;
   transition: all 0.3s;
+  color: var(--menu-text-color);
 }
 
 .region-selector:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--hover-color);
+  color: var(--secondary-color);
 }
 
 .region-text {
   font-size: 14px;
-}
-
-.region-icon {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .header-right {
@@ -141,27 +148,28 @@ const handleCommand = (command: string) => {
   gap: 24px;
 }
 
-.search-section {
-  width: 300px;
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.search-input :deep(.el-input__wrapper) {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.theme-button {
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: var(--menu-text-color) !important;
+  border: none !important;
 }
 
-.search-input :deep(.el-input__inner) {
-  color: #fff;
-  height: 32px;
+.theme-button:hover {
+  background-color: var(--hover-color) !important;
+  color: var(--primary-color) !important;
+  transform: rotate(30deg);
 }
 
-.search-input :deep(.el-input__inner::placeholder) {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.search-input :deep(.el-input__prefix-icon) {
-  color: rgba(255, 255, 255, 0.5);
+.theme-button .el-icon {
+  font-size: 18px;
 }
 
 .user-section {
@@ -180,12 +188,12 @@ const handleCommand = (command: string) => {
 }
 
 .user-info:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--hover-color);
 }
 
 .username {
   font-size: 14px;
-  color: #fff;
+  color: var(--menu-text-color);
 }
 
 :deep(.el-dropdown-menu__item) {
