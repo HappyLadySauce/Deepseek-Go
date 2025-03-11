@@ -79,23 +79,40 @@ export async function deleteSession(sessionId: number): Promise<void> {
   await axios.delete(`/chat/sessions/${sessionId}`);
 }
 
+// 创建新会话
+export async function createSession(title = "新会话"): Promise<Session> {
+  const response = await axios.post('/chat/sessions', { title });
+  console.log('创建会话API返回:', response.data);
+  return response.data.data;
+}
+
 // 发送消息（非流式）
 export async function sendMessage(
   message: string, 
   sessionId = 0, 
   aiConfigId = 0, 
   knowledgeIds: number[] = []
-): Promise<{ message: Message, session: Session }> {
+): Promise<{ message: Message, session?: Session }> {
   const response = await axios.post('/chat/completions', {
     session_id: sessionId,
     message,
     ai_config_id: aiConfigId,
     knowledge_ids: knowledgeIds
   });
-  return {
-    message: response.data.data,
-    session: response.data.session
+  
+  console.log('原始API返回:', response.data);
+  
+  // 处理不同的返回格式
+  let result: { message: Message, session?: Session } = {
+    message: response.data.data
   };
+  
+  // 如果响应中包含session信息
+  if (response.data.session) {
+    result.session = response.data.session;
+  }
+  
+  return result;
 }
 
 // 获取AI配置列表

@@ -7,7 +7,7 @@ import router from './router'
 const instance = axios.create({
   // 本地开发环境
   baseURL: "http://localhost:14020/api/v1",
-  timeout: 10000, // 增加请求超时时间
+  timeout: 50000, // 增加请求超时时间
   headers: {
     'Content-Type': 'application/json'
   }

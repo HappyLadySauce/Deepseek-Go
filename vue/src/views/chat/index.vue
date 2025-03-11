@@ -48,6 +48,66 @@ const configForm = ref({
   is_default: false
 });
 
+// 监听当前配置变化，同步到配置表单
+watch(() => chatStore.currentConfig, (newConfig) => {
+  if (newConfig) {
+    configForm.value.model_name = newConfig.model_name;
+    configForm.value.provider = newConfig.provider;
+    configForm.value.temperature = newConfig.temperature;
+    configForm.value.max_tokens = newConfig.max_tokens;
+    configForm.value.is_default = newConfig.is_default;
+  }
+}, { immediate: true, deep: true });
+
+// 保存AI配置
+async function saveAIConfig() {
+  try {
+    // 这里可以调用API保存配置
+    // 暂时只设置当前配置
+    if (chatStore.currentConfigId && chatStore.currentConfigId > 0) {
+      // 更新现有配置
+      console.log('更新AI配置:', configForm.value);
+    } else {
+      // 创建新配置
+      console.log('创建新AI配置:', configForm.value);
+    }
+    
+    // 更新store中的AI配置
+    if (chatStore.currentConfig) {
+      chatStore.currentConfig.model_name = configForm.value.model_name;
+      chatStore.currentConfig.provider = configForm.value.provider;
+      chatStore.currentConfig.temperature = configForm.value.temperature;
+      chatStore.currentConfig.max_tokens = configForm.value.max_tokens;
+      chatStore.currentConfig.is_default = configForm.value.is_default;
+    }
+    
+    ElMessage.success('AI配置已保存');
+    showAISettings.value = false;
+  } catch (error) {
+    console.error('保存AI配置失败:', error);
+    ElMessage.error('保存AI配置失败');
+  }
+}
+
+// 重置配置表单
+function resetConfigForm() {
+  if (chatStore.currentConfig) {
+    configForm.value.model_name = chatStore.currentConfig.model_name;
+    configForm.value.provider = chatStore.currentConfig.provider;
+    configForm.value.temperature = chatStore.currentConfig.temperature;
+    configForm.value.max_tokens = chatStore.currentConfig.max_tokens;
+    configForm.value.is_default = chatStore.currentConfig.is_default;
+  } else {
+    configForm.value = {
+      model_name: '',
+      provider: '',
+      temperature: 0.7,
+      max_tokens: 2048,
+      is_default: false
+    };
+  }
+}
+
 // 监听消息变化，自动滚动到底部
 watch(() => chatStore.messages, () => {
   scrollToBottom();
@@ -58,7 +118,7 @@ onMounted(async () => {
   try {
     console.log('正在加载聊天页面数据...');
     // 加载数据
-    await Promise.all([
+    const results = await Promise.allSettled([
       chatStore.loadAIConfigs().catch(e => {
         console.error('加载AI配置失败:', e);
         return null;
@@ -72,46 +132,64 @@ onMounted(async () => {
         return null;
       })
     ]);
+    
+    console.log('数据加载结果:', results);
+    
+    // 检查会话加载状态
+    const sessionsResult = results[1];
+    if (sessionsResult.status === 'fulfilled') {
+      console.log('会话加载成功');
+    } else {
+      console.error('会话加载失败，使用模拟数据:', sessionsResult.reason);
+      // 使用模拟数据
+      if (!chatStore.sessions || chatStore.sessions.length === 0) {
+        console.log('使用模拟会话数据');
+        chatStore.sessions = [
+          {
+            id: 1,
+            title: "关于AI的讨论",
+            last_message: "人工智能正在改变我们的生活方式...",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 2,
+            title: "技术问题解答",
+            last_message: "你可以使用Vue3的Composition API来解决这个问题...",
+            created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+          }
+        ];
+      }
+    }
+    
+    // 检查知识库文件加载状态
+    const filesResult = results[2];
+    if (filesResult.status !== 'fulfilled' && (!chatStore.knowledgeFiles || chatStore.knowledgeFiles.length === 0)) {
+      console.log('使用模拟知识库文件数据');
+      chatStore.knowledgeFiles = [
+        {
+          id: 1,
+          file_name: "Vue3开发手册.pdf",
+          file_size: 1254789,
+          file_type: ".pdf",
+          status: "completed",
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          file_name: "深度学习入门.docx",
+          file_size: 852147,
+          file_type: ".docx",
+          status: "completed",
+          created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      ];
+    }
+    
     console.log('数据加载完成');
   } catch (error) {
-    console.error("加载数据失败，使用模拟数据:", error);
-    
-    // 如果API请求失败，使用模拟数据
-    chatStore.sessions = [
-      {
-        id: 1,
-        title: "关于AI的讨论",
-        last_message: "人工智能正在改变我们的生活方式...",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        title: "技术问题解答",
-        last_message: "你可以使用Vue3的Composition API来解决这个问题...",
-        created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-      }
-    ];
-    
-    chatStore.knowledgeFiles = [
-      {
-        id: 1,
-        file_name: "Vue3开发手册.pdf",
-        file_size: 1254789,
-        file_type: ".pdf",
-        status: "completed",
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        file_name: "深度学习入门.docx",
-        file_size: 852147,
-        file_type: ".docx",
-        status: "completed",
-        created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-      }
-    ];
+    console.error("加载数据失败:", error);
   }
   
   // 如果URL有会话ID参数，加载对应会话
@@ -119,24 +197,8 @@ onMounted(async () => {
   if (sessionId) {
     console.log('从URL加载会话ID:', sessionId);
     chatStore.selectSession(sessionId);
-    
-    // 如果API请求失败，显示模拟消息
-    if (chatStore.messages.length === 0) {
-      chatStore.messages = [
-        {
-          id: 1,
-          role: "user",
-          content: "你好，请介绍一下你自己",
-          created_at: new Date(Date.now() - 5 * 60 * 1000).toISOString()
-        },
-        {
-          id: 2,
-          role: "assistant",
-          content: "你好！我是DeepSeek AI助手，一个基于大型语言模型的智能对话系统。我可以回答问题、提供信息、参与对话等。有什么我可以帮助你的吗？",
-          created_at: new Date(Date.now() - 4.5 * 60 * 1000).toISOString()
-        }
-      ];
-    }
+  } else {
+    console.log('没有会话ID参数，不加载特定会话');
   }
   
   // 设置消息观察器
@@ -186,6 +248,8 @@ onUnmounted(() => {
 // 监听消息输入框高度
 function adjustInputHeight(event: Event) {
   const textarea = event.target as HTMLTextAreaElement;
+  if (!textarea) return;
+  
   textarea.style.height = 'auto';
   textarea.style.height = `${textarea.scrollHeight}px`;
 }
@@ -286,36 +350,65 @@ function handleDeleteSession(id: number) {
 }
 
 // 发送消息
-function sendMessage() {
+async function sendMessage() {
   console.log('发送消息按钮被点击');
+  
+  // 如果正在流式生成，则先停止
+  if (chatStore.streaming) {
+    console.log('停止生成');
+    chatStore.cancelStream();
+    return;
+  }
   
   if (!chatStore.newMessage.trim()) {
     console.log('消息为空，不发送');
     return;
   }
   
-  console.log('开始发送消息:', chatStore.newMessage);
+  // 检查是否有会话ID
+  if (!chatStore.currentSessionId) {
+    console.log('没有会话ID，先创建新会话');
+    try {
+      await chatStore.createNewSession();
+    } catch (error) {
+      console.error('创建新会话失败:', error);
+      ElMessage.error('创建新会话失败，无法发送消息');
+      return;
+    }
+  }
   
-  // 添加用户消息到列表
-  const userMessage = {
-    id: Date.now(),
-    role: 'user' as 'user',
-    content: chatStore.newMessage,
-    created_at: new Date().toISOString()
-  };
+  // 如果配置表单已修改，先应用配置
+  if (chatStore.currentConfig && (
+    chatStore.currentConfig.model_name !== configForm.value.model_name ||
+    chatStore.currentConfig.provider !== configForm.value.provider ||
+    chatStore.currentConfig.temperature !== configForm.value.temperature ||
+    chatStore.currentConfig.max_tokens !== configForm.value.max_tokens
+  )) {
+    console.log('应用临时AI配置');
+    // 应用临时配置
+    chatStore.currentConfig.model_name = configForm.value.model_name;
+    chatStore.currentConfig.provider = configForm.value.provider;
+    chatStore.currentConfig.temperature = configForm.value.temperature;
+    chatStore.currentConfig.max_tokens = configForm.value.max_tokens;
+  }
   
-  chatStore.messages.push(userMessage);
+  // 保存消息内容
+  const messageText = chatStore.newMessage;
+  console.log('开始发送消息:', messageText, '会话ID:', chatStore.currentSessionId);
   
-  // 调用API发送消息
-  chatStore.submitMessage(chatStore.newMessage)
-    .then(() => {
-      console.log('消息发送成功');
-      chatStore.newMessage = '';
-    })
-    .catch((error) => {
-      console.error('消息发送失败:', error);
-      ElMessage.error('消息发送失败');
-    });
+  // 立即清空输入框
+  chatStore.newMessage = '';
+
+  try {
+    // 调用API发送消息 - 让store处理所有消息添加逻辑
+    await chatStore.submitMessage(messageText);
+    console.log('消息发送成功');
+    // 滚动到底部
+    scrollToBottom();
+  } catch (error) {
+    console.error('消息发送失败:', error);
+    ElMessage.error('消息发送失败，请稍后重试');
+  }
 }
 
 // 发送消息（支持Enter键发送，Shift+Enter换行）
@@ -327,11 +420,36 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 // 添加新的函数用于创建新会话
-function createNewSession() {
+async function createNewSession() {
   console.log('创建新会话');
-  // 清空当前会话ID和消息
-  chatStore.selectSession(null);
-  // 不添加虚假消息，由真实API处理
+  
+  try {
+    // 先清空当前会话ID和消息
+    chatStore.selectSession(null);
+    
+    // 获取默认AI配置（确保有配置ID）
+    if (!chatStore.currentConfig) {
+      await chatStore.loadAIConfigs();
+    }
+    
+    // 发送创建新会话的API请求
+    await chatStore.createNewSession();
+    
+    // 滚动到底部
+    nextTick(() => {
+      scrollToBottom();
+    });
+    
+    // 聚焦输入框
+    nextTick(() => {
+      if (inputRef.value) {
+        inputRef.value.focus();
+      }
+    });
+  } catch (error) {
+    console.error('创建新会话失败:', error);
+    ElMessage.error('创建新会话失败');
+  }
 }
 </script>
 
@@ -351,7 +469,11 @@ function createNewSession() {
         <div v-if="showAISettings" class="ai-settings">
           <el-form :model="configForm" label-width="80px" size="small">
             <el-form-item label="模型提供商">
-              <el-select v-model="configForm.provider" placeholder="选择提供商">
+              <el-select 
+                v-model="configForm.provider" 
+                placeholder="选择提供商"
+                @change="configForm.model_name = ''"
+              >
                 <el-option label="DeepSeek" value="deepseek" />
                 <el-option label="Kimi" value="kimi" />
               </el-select>
@@ -389,8 +511,8 @@ function createNewSession() {
             </el-form-item>
             
             <el-form-item>
-              <el-button type="primary" size="small">保存配置</el-button>
-              <el-button size="small">重置</el-button>
+              <el-button type="primary" size="small" @click="saveAIConfig">保存配置</el-button>
+              <el-button size="small" @click="resetConfigForm">重置</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -406,10 +528,10 @@ function createNewSession() {
         </div>
         
         <div class="session-list">
-          <el-empty v-if="chatStore.sessions.length === 0" description="暂无历史会话" />
+          <el-empty v-if="!chatStore.sessions || chatStore.sessions.length === 0" description="暂无历史会话" />
           
           <div 
-            v-for="session in chatStore.sessions" 
+            v-for="session in chatStore.sessions || []" 
             :key="session.id"
             class="session-item"
             :class="{ 'active': chatStore.currentSessionId === session.id }"
@@ -447,7 +569,7 @@ function createNewSession() {
       <!-- 消息列表 -->
       <div class="messages-container" ref="chatContainerRef">
         <el-empty 
-          v-if="chatStore.messages.length === 0" 
+          v-if="!chatStore.messages || chatStore.messages.length === 0" 
           description="开始新的对话" 
           :image-size="120"
         >
@@ -458,7 +580,7 @@ function createNewSession() {
         
         <div v-else class="message-list">
           <div 
-            v-for="message in chatStore.messages" 
+            v-for="message in chatStore.messages || []" 
             :key="message.id"
             class="message-item"
             :class="message.role"
@@ -481,9 +603,9 @@ function createNewSession() {
       
       <!-- 输入区域 -->
       <div class="input-container">
-        <div class="selected-knowledge" v-if="chatStore.selectedKnowledgeIds.length > 0">
+        <div class="selected-knowledge" v-if="chatStore.selectedKnowledgeIds && chatStore.selectedKnowledgeIds.length > 0">
           <div class="knowledge-tag" v-for="id in chatStore.selectedKnowledgeIds" :key="id">
-            {{ chatStore.knowledgeFiles.find(f => f.id === id)?.file_name }}
+            {{ chatStore.knowledgeFiles && chatStore.knowledgeFiles.find(f => f.id === id)?.file_name }}
             <el-button 
               type="danger" 
               text 
@@ -552,13 +674,13 @@ function createNewSession() {
       </div>
       
       <div class="knowledge-list">
-        <el-empty v-if="chatStore.knowledgeFiles.length === 0" description="暂无知识库文件" />
+        <el-empty v-if="!chatStore.knowledgeFiles || chatStore.knowledgeFiles.length === 0" description="暂无知识库文件" />
         
         <div 
-          v-for="file in chatStore.knowledgeFiles" 
+          v-for="file in chatStore.knowledgeFiles || []" 
           :key="file.id"
           class="knowledge-item"
-          :class="{ 'selected': chatStore.selectedKnowledgeIds.includes(file.id) }"
+          :class="{ 'selected': chatStore.selectedKnowledgeIds && chatStore.selectedKnowledgeIds.includes(file.id) }"
           @click="chatStore.toggleKnowledgeFile(file.id)"
         >
           <div class="file-info">
