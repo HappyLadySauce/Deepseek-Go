@@ -43,12 +43,6 @@ const router = createRouter({
     {
       path: '/settings',
       component: () => import('@/views/settings/index.vue'),
-    },
-    // AI聊天路由
-    {
-      path: '/chat',
-      component: () => import('@/views/chat/index.vue'),
-      meta: { requiresAuth: true }
     }
   ]
 })
