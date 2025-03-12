@@ -13,11 +13,11 @@ import (
 )
 
 func DSN() string {
-	return Config.Database.User + ":" + Config.Database.Password + "@tcp(" + Config.Database.Host + ":" + strconv.Itoa(Config.Database.Port) + ")/" + Config.Database.Name + "?charset=" + Config.Database.Charset + "&parseTime=" + strconv.FormatBool(Config.Database.ParseTime) + "&loc=" + url.QueryEscape(Config.Database.Loc)
+	return Config.MySQL.User + ":" + Config.MySQL.Password + "@tcp(" + Config.MySQL.Host + ":" + strconv.Itoa(Config.MySQL.Port) + ")/" + Config.MySQL.Name + "?charset=" + Config.MySQL.Charset + "&parseTime=" + strconv.FormatBool(Config.MySQL.ParseTime) + "&loc=" + url.QueryEscape(Config.MySQL.Loc)
 }
 
 // 连接数据库
-func InitDB() {
+func InitMysql() {
 	db, err := gorm.Open(mysql.Open(DSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("连接数据库失败: %v", err)
@@ -28,19 +28,19 @@ func InitDB() {
 		log.Fatalf("获取数据库连接失败: %v", err)
 	}
 
-	sqlDB.SetMaxIdleConns(Config.Database.SetMaxIdleConns)
-	sqlDB.SetMaxOpenConns(Config.Database.SetMaxOpenConns)
-	sqlDB.SetConnMaxLifetime(time.Duration(Config.Database.SetConnMaxLifetime) * time.Second)
-	sqlDB.SetConnMaxIdleTime(time.Duration(Config.Database.SetConnMaxIdleTime) * time.Second)
+	sqlDB.SetMaxIdleConns(Config.MySQL.SetMaxIdleConns)
+	sqlDB.SetMaxOpenConns(Config.MySQL.SetMaxOpenConns)
+	sqlDB.SetConnMaxLifetime(time.Duration(Config.MySQL.SetConnMaxLifetime) * time.Second)
+	sqlDB.SetConnMaxIdleTime(time.Duration(Config.MySQL.SetConnMaxIdleTime) * time.Second)
 
 	global.DB = db
 
 	// 数据库迁移
-	migrateDB()
+	migrateMysql()
 }
 
 // 数据库迁移
-func migrateDB() {
+func migrateMysql() {
 	err := global.DB.AutoMigrate(
 		&models.User{},
 		&models.EmailVerification{},

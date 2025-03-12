@@ -11,7 +11,7 @@ type config struct {
 		Name string `mapstructure:"name"`
 		Port int    `mapstructure:"port"`
 	}
-	Database struct {
+	MySQL struct {
 		Host               string `mapstructure:"host"`
 		Port               int    `mapstructure:"port"`
 		User               string `mapstructure:"user"`
@@ -24,6 +24,11 @@ type config struct {
 		SetMaxOpenConns    int    `mapstructure:"SetMaxOpenConns"`
 		SetConnMaxLifetime int    `mapstructure:"SetConnMaxLifetime"`
 		SetConnMaxIdleTime int    `mapstructure:"SetConnMaxIdleTime"`
+	}
+	MongoDB struct {
+		Host string `mapstructure:"host"`
+		Port int    `mapstructure:"port"`
+		Name string `mapstructure:"name"`
 	}
 	Redis struct {
 		Host     string `mapstructure:"host"`
@@ -82,13 +87,10 @@ func InitConfig() {
 		Config.App.Port = 14020
 	}
 
-	// 如果ServerName未设置，则默认使用Host
-	if Config.Email.ServerName == "" {
-		Config.Email.ServerName = Config.Email.Host
-	}
-
 	// 初始化数据库
-	InitDB()
+	InitMysql()
 	// 初始化Redis
 	InitRedis()
+	// 初始化MongoDB
+	InitMongoDB()
 }

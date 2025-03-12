@@ -4,6 +4,7 @@ app:
   # 应用端口
   port: 14020
 # 数据库配置
+mysql:
   host: "localhost"
   # 数据库端口
   port: 3306

@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/go-redis/redis/v8"
+	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 )
 
@@ -10,4 +11,6 @@ var (
 	DB *gorm.DB
 	// Redis连接
 	RedisDB *redis.Client
+	// MongoDB连接
+	MongoDBClient *mongo.Client
 )
