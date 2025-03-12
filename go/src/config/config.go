@@ -28,7 +28,6 @@ type config struct {
 	MongoDB struct {
 		Host string `mapstructure:"host"`
 		Port int    `mapstructure:"port"`
-		Name string `mapstructure:"name"`
 	}
 	Redis struct {
 		Host     string `mapstructure:"host"`
@@ -66,8 +65,10 @@ type config struct {
 	}
 }
 
+// 配置文件
 var Config *config
 
+// 初始化配置文件
 func InitConfig() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
@@ -88,9 +89,9 @@ func InitConfig() {
 	}
 
 	// 初始化数据库
-	InitMysql()
+	// InitMysql()
 	// 初始化Redis
-	InitRedis()
+	// InitRedis()
 	// 初始化MongoDB
 	InitMongoDB()
 }

@@ -3,40 +3,6 @@ app:
   name: "Deepseek-Go"
   # 应用端口
   port: 14020
-# 数据库配置
-mysql:
-  host: "localhost"
-  # 数据库端口
-  port: 3306
-  # 数据库用户名
-  user: "root"
-  # 数据库密码
-  password: "your_password_here"
-  # 数据库名称
-  name: "deepseek"
-  # 数据库字符集
-  charset: "utf8mb4"
-  # 是否解析时间
-  parseTime: true
-  # 时区
-  loc: "Asia/Shanghai"
-  # 最大空闲连接数
-  SetMaxIdleConns: 10
-  # 最大打开连接数
-  SetMaxOpenConns: 100
-  # 连接最大生存时间
-  SetConnMaxLifetime: 60
-  # 连接最大空闲时间
-  SetConnMaxIdleTime: 60
-# Redis配置
-redis:
-  host: "localhost"
-  # Redis端口
-  port: 6379
-  # Redis密码
-  password: ""
-  # Redis数据库
-  db: 0
 # 跨域配置
 cors:
   # 允许的域名

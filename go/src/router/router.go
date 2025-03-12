@@ -1,7 +1,6 @@
 package router
 
 import (
-	"Deepseek-Go/controller"
 	"Deepseek-Go/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -16,20 +15,7 @@ func InitRouter() *gin.Engine {
 	api := router.Group("/api/v1")
 	auth := api.Group("/auth")
 	{
-		auth.POST("/login", controller.Login)
-		auth.POST("/register", controller.Register)
-
-		// 邮箱验证相关接口
-		auth.POST("/send-verification", controller.SendEmailVerification)
-		auth.POST("/verify-email", controller.VerifyEmail)
-		auth.GET("/test-email-connection", controller.TestEmailConnection)
-	}
-
-	// 需要认证的接口
-	authorized := api.Group("/")
-	authorized.Use(middlewares.AuthMiddleware())
-	{
-
+		auth.POST("/login", nil)
 	}
 
 	return router

@@ -12,5 +12,5 @@ var (
 	// Redis连接
 	RedisDB *redis.Client
 	// MongoDB连接
-	MongoDBClient *mongo.Client
+	MongoDB *mongo.Client
 )
