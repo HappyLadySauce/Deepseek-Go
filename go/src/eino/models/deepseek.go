@@ -1,4 +1,4 @@
-package deepseek
+package models
 
 import (
 	"context"
