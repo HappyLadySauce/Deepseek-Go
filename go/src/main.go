@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"Deepseek-Go/config"
-	"Deepseek-Go/router"
+	// "Deepseek-Go/config"
+	// "Deepseek-Go/router"
 )
 
 func main() {
-	config.InitConfig()
+	// config.InitConfig()
 
-	router := router.InitRouter()
-	router.Run(fmt.Sprintf(":%d", config.Config.App.Port))
+	// router := router.InitRouter()
+	// router.Run(fmt.Sprintf(":%d", config.Config.App.Port))
 }
