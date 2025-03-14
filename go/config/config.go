@@ -8,32 +8,11 @@ import (
 
 type config struct {
 	App struct {
-		Name string `mapstructure:"name"`
 		Port int    `mapstructure:"port"`
-	}
-	MySQL struct {
-		Host               string `mapstructure:"host"`
-		Port               int    `mapstructure:"port"`
-		User               string `mapstructure:"user"`
-		Password           string `mapstructure:"password"`
-		Name               string `mapstructure:"name"`
-		Charset            string `mapstructure:"charset"`
-		ParseTime          bool   `mapstructure:"parseTime"`
-		Loc                string `mapstructure:"loc"`
-		SetMaxIdleConns    int    `mapstructure:"SetMaxIdleConns"`
-		SetMaxOpenConns    int    `mapstructure:"SetMaxOpenConns"`
-		SetConnMaxLifetime int    `mapstructure:"SetConnMaxLifetime"`
-		SetConnMaxIdleTime int    `mapstructure:"SetConnMaxIdleTime"`
 	}
 	MongoDB struct {
 		Host string `mapstructure:"host"`
 		Port int    `mapstructure:"port"`
-	}
-	Redis struct {
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		Password string `mapstructure:"password"`
-		DB       int    `mapstructure:"db"`
 	}
 	Cors struct {
 		AllowOrigins     []string `mapstructure:"allow_origins"`
@@ -49,7 +28,6 @@ type config struct {
 		Password   string `mapstructure:"password"`
 		From       string `mapstructure:"from"`
 		EnableSSL  bool   `mapstructure:"enable_ssl"`
-		ServerName string `mapstructure:"server_name"`
 	}
 	AI struct {
 		// 深度求索 api

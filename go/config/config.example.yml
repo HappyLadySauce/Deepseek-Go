@@ -1,6 +1,4 @@
 app:
-  # 应用名称
-  name: "Deepseek-Go"
   # 应用端口
   port: 14020
 # 跨域配置

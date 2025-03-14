@@ -5,10 +5,11 @@ import (
 	"log"
 	"strconv"
 
-	"Deepseek-Go/global"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+var MongoDB *mongo.Client
 
 func InitMongoDB() {
 	// 连接MongoDB
@@ -29,5 +30,5 @@ func InitMongoDB() {
 	
 	// 设置全局变量
 	// 将连接对象赋值给全局变量
-	global.MongoDB = db
+	MongoDB = db
 }
